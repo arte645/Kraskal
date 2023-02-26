@@ -1,0 +1,72 @@
+sum = 0
+rebra = ["AB", "AC", "AE", "BC", "BE", "CE", "BD", "EG", "ED", "DG", "GH", "DH", "DF", "FH"]
+weight = [2, 2, 7, 2, 2, 5, 9, 9, 10, 2, 17, 16, 5, 17]
+connection = [""]
+
+for j in range(len(weight)-1):
+    for i in range(len(weight)-1):
+        if weight[i]>weight[i+1]:
+            bup=weight[i]
+            weight[i], weight[i + 1] = weight[i+1], bup
+            aboba=rebra[i]
+            rebra[i]=rebra[i+1]
+            rebra[i+1]=aboba
+print(weight, rebra, sep='\n')
+
+stroka = ""
+
+for k in range(len(weight)):
+
+    if stroka=="":
+        stroka+=rebra[k]
+        sum+=weight[k]
+        continue
+
+    if rebra[k][0] not in stroka and rebra[k][1] in stroka:
+        for i in range(len(connection)):
+            if rebra[k][0] in stroka and rebra[k][1] in connection[i] or rebra[k][1] in stroka and rebra[k][0] in connection[i]:
+                for o in range (len(connection[i])):
+                    if connection[i][o] not in stroka:
+                        stroka+=connection[i]
+                connection[i]=""
+                sum+=weight[k]
+
+    elif rebra[k][0] in stroka and rebra[k][1] not in stroka:
+        for i in range(len(connection)):
+            if rebra[k][0] in stroka and rebra[k][1] in connection[i] or rebra[k][1] in stroka and rebra[k][0] in connection[i]:
+                stroka+=connection[i]
+                connection[i] = ""
+                sum += weight[k]
+
+    if rebra[k][0] not in stroka and rebra[k][1] in stroka:
+        stroka += rebra[k][0]
+        sum += weight[k]
+
+    elif rebra[k][1] not in stroka and rebra[k][0] in stroka:
+        stroka += rebra[k][1]
+        sum += weight[k]
+    if rebra[k][0] not in stroka and rebra[k][1] not in stroka and connection[0]=="":
+        connection[0]+=rebra[k]
+        sum+=weight[k]
+        continue
+
+    for g in range(len(connection)):
+        if rebra[k][0] not in stroka and rebra[k][1] not in stroka:
+            if rebra[k][0] in connection[g] and rebra[k][1] not in connection[g]:
+                connection[g] += (rebra[k][1])
+                sum += weight[k]
+            if rebra[k][0] not in connection[g] and rebra[k][1] in connection[g]:
+                connection[g] += (rebra[k][0])
+                sum += weight[k]
+            if rebra[k][0] not in connection[g] and rebra[k][1] not in connection[g]:
+                connection.append("")
+                connection[g + 1] += (rebra[k])
+                sum += weight[k]
+
+    print(sum)
+    print(stroka)
+    print(connection)
+
+
+print(stroka,sum)
+print(connection)
